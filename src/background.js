@@ -1,9 +1,9 @@
 'use strict';
 
 const prefs = {
-  'enabled': false,
+  'enabled': true,
   'overwrite-origin': true,
-  'methods': ['GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH', 'PROPFIND', 'PROPPATCH', 'MKCOL', 'COPY', 'MOVE', 'LOCK'],
+  'methods': ['GET'],
   'remove-x-frame': true,
   'allow-credentials': true,
   'allow-headers-value': '*',
@@ -45,6 +45,9 @@ cors.onHeadersReceived = d => {
   else {
     origin = '*';
   }
+  
+  console.log("sergio: " + origin);
+  
   if (redirects[tabId]) {
     delete redirects[tabId][requestId];
   }
@@ -125,11 +128,13 @@ cors.install = () => {
   if (/Firefox/.test(navigator.userAgent) === false) {
     extra.push('extraHeaders');
   }
+    // urls: ['<all_urls>']
   chrome.webRequest.onHeadersReceived.addListener(cors.onHeadersReceived, {
-    urls: ['<all_urls>']
+    urls: ['*://*.bikeexif.com/*', '*://*.pipeburn.com/*']
   }, extra);
+    // urls: ['<all_urls>']
   chrome.webRequest.onBeforeRedirect.addListener(cors.onBeforeRedirect, {
-    urls: ['<all_urls>']
+    urls: ['*://*.bikeexif.com/*', '*://*.pipeburn.com/*']
   });
 };
 cors.remove = () => {
@@ -155,7 +160,7 @@ cors.onCommand = () => {
     }
   });
   chrome.browserAction.setTitle({
-    title: prefs.enabled ? 'Access-Control-Allow-Origin is unblocked' : 'Disabled: Default server behavior'
+    title: prefs.enabled ? 'Pikai manager is ACTIVE' : 'Pikai manager is DISABLED'
   });
 };
 
@@ -197,11 +202,11 @@ chrome.contextMenus.onClicked.addListener(({menuItemId, checked}) => {
 chrome.storage.local.get(prefs, ps => {
   Object.assign(prefs, ps);
   /* context menu */
-  chrome.contextMenus.create({
-    title: 'Test CORS',
-    id: 'test-cors',
-    contexts: ['browser_action']
-  });
+  // chrome.contextMenus.create({
+    // title: 'Test CORS',
+    // id: 'test-cors',
+    // contexts: ['browser_action']
+  // });
 
   chrome.contextMenus.create({
     title: 'Enable Access-Control-Allow-Origin',
@@ -211,60 +216,60 @@ chrome.storage.local.get(prefs, ps => {
     checked: prefs['overwrite-origin']
   });
 
-  chrome.contextMenus.create({
-    title: 'Enable Access-Control-Allow-Credentials',
-    type: 'checkbox',
-    id: 'allow-credentials',
-    contexts: ['browser_action'],
-    checked: prefs['allow-credentials']
-  });
+  // chrome.contextMenus.create({
+    // title: 'Enable Access-Control-Allow-Credentials',
+    // type: 'checkbox',
+    // id: 'allow-credentials',
+    // contexts: ['browser_action'],
+    // checked: prefs['allow-credentials']
+  // });
 
-  chrome.contextMenus.create({
-    title: 'Enable Access-Control-[Allow/Expose]-Headers',
-    type: 'checkbox',
-    id: 'allow-headers',
-    contexts: ['browser_action'],
-    checked: prefs['allow-headers']
-  });
+  // chrome.contextMenus.create({
+    // title: 'Enable Access-Control-[Allow/Expose]-Headers',
+    // type: 'checkbox',
+    // id: 'allow-headers',
+    // contexts: ['browser_action'],
+    // checked: prefs['allow-headers']
+  // });
 
-  const extra = chrome.contextMenus.create({
-    title: 'Extra Options',
-    contexts: ['browser_action']
-  });
+  // const extra = chrome.contextMenus.create({
+    // title: 'Extra Options',
+    // contexts: ['browser_action']
+  // });
 
-  chrome.contextMenus.create({
-    title: 'Remove X-Frame-Options',
-    type: 'checkbox',
-    id: 'remove-x-frame',
-    contexts: ['browser_action'],
-    checked: prefs['remove-x-frame'],
-    parentId: extra
-  });
-  chrome.contextMenus.create({
-    title: 'Only Unblock Initiator',
-    type: 'checkbox',
-    id: 'unblock-initiator',
-    contexts: ['browser_action'],
-    checked: prefs['unblock-initiator'],
-    parentId: extra
-  });
+  // chrome.contextMenus.create({
+    // title: 'Remove X-Frame-Options',
+    // type: 'checkbox',
+    // id: 'remove-x-frame',
+    // contexts: ['browser_action'],
+    // checked: prefs['remove-x-frame'],
+    // parentId: extra
+  // });
+  // chrome.contextMenus.create({
+    // title: 'Only Unblock Initiator',
+    // type: 'checkbox',
+    // id: 'unblock-initiator',
+    // contexts: ['browser_action'],
+    // checked: prefs['unblock-initiator'],
+    // parentId: extra
+  // });
 
 
-  const menu = chrome.contextMenus.create({
-    title: 'Access-Control-Allow-Methods Methods:',
-    contexts: ['browser_action'],
-    parentId: extra
-  });
-  for (const method of ['PUT', 'DELETE', 'OPTIONS', 'PATCH', 'PROPFIND', 'PROPPATCH', 'MKCOL', 'COPY', 'MOVE', 'LOCK']) {
-    chrome.contextMenus.create({
-      title: method,
-      type: 'checkbox',
-      id: method,
-      contexts: ['browser_action'],
-      checked: prefs.methods.indexOf(method) !== -1,
-      parentId: menu
-    });
-  }
+  // const menu = chrome.contextMenus.create({
+    // title: 'Access-Control-Allow-Methods Methods:',
+    // contexts: ['browser_action'],
+    // parentId: extra
+  // });
+  // for (const method of ['PUT', 'DELETE', 'OPTIONS', 'PATCH', 'PROPFIND', 'PROPPATCH', 'MKCOL', 'COPY', 'MOVE', 'LOCK']) {
+    // chrome.contextMenus.create({
+      // title: method,
+      // type: 'checkbox',
+      // id: method,
+      // contexts: ['browser_action'],
+      // checked: prefs.methods.indexOf(method) !== -1,
+      // parentId: menu
+    // });
+  // }
 
   cors.onCommand();
 });

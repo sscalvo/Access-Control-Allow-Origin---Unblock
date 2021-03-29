@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
   "version": "0.1.6",
-  "name": "CORS Unblock",
-  "description": "No more CORS error by appending 'Access-Control-Allow-Origin: *' header to local and remote web requests when enabled",
+  "name": "Pikai manager",
+  "description": "Multi-user dataset labeler manager" ,
   "permissions": [
     "storage",
-    "<all_urls>",
+	"<all_urls>",
     "webRequest",
     "webRequestBlocking",
     "contextMenus"
@@ -21,7 +21,7 @@
     "256": "data/icons/256.png",
     "512": "data/icons/512.png"
   },
-  "homepage_url": "https://add0n.com/access-control.html",
+  "homepage_url": "https://pikai.sscalvo.com",
   "browser_action":{},
   "background": {
     "scripts": [
