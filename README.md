@@ -1,3 +1,5 @@
+This is a fork from the original https://github.com/balvin-perrie/Access-Control-Allow-Origin---Unblock
+
 This extension provides control over "XMLHttpRequest" and "fetch" methods by providing custom "access-control-allow-origin" and "access-control-allow-methods" headers to every requests that the browser receives. A user can toggle the extension on and off from the toolbar button. To modify how these headers are altered, use the right-click context menu items. You can customize what methods are allowed. The default option is to allow 'GET', 'PUT', 'POST', 'DELETE', 'HEAD', 'OPTIONS', 'PATCH' methods. You can also ask the extension not to overwrite these headers when the server already fills them. This extension also fixes CORS policies of redirected URLs.
 
 ### YouTube Preview
